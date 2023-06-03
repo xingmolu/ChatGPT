@@ -3,6 +3,8 @@
 require("../polyfill");
 
 import { useState, useEffect } from "react";
+import posthog from "posthog-js";
+import { PostHogProvider, usePostHog } from "posthog-js/react";
 
 import styles from "./home.module.scss";
 
@@ -23,6 +25,15 @@ import {
 } from "react-router-dom";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
+
+if (window !== undefined) {
+  posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
+    session_recording: {
+      recordCrossOriginIframes: true,
+    },
+  });
+}
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -136,6 +147,7 @@ function Screen() {
 
 export function Home() {
   useSwitchTheme();
+  const posthog = usePostHog();
 
   if (!useHasHydrated()) {
     return <Loading />;
@@ -143,9 +155,11 @@ export function Home() {
 
   return (
     <ErrorBoundary>
-      <Router>
-        <Screen />
-      </Router>
+      <PostHogProvider client={posthog}>
+        <Router>
+          <Screen />
+        </Router>
+      </PostHogProvider>
     </ErrorBoundary>
   );
 }

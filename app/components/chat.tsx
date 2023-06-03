@@ -61,6 +61,7 @@ import { useMaskStore } from "../store/mask";
 import { useCommand } from "../command";
 import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
+import { usePostHog } from "posthog-js/react";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -411,6 +412,7 @@ export function Chat() {
     state.currentSessionIndex,
   ]);
   const config = useAppConfig();
+  const posthog = usePostHog();
   const fontSize = config.fontSize;
 
   const [showExport, setShowExport] = useState(false);
@@ -494,11 +496,13 @@ export function Chat() {
     setPromptHints([]);
     if (!isMobileScreen) inputRef.current?.focus();
     setAutoScroll(true);
+    posthog?.capture("user_send", { text: userInput });
   };
 
   // stop response
   const onUserStop = (messageId: number) => {
     ChatControllerPool.stop(sessionIndex, messageId);
+    posthog?.capture("user_stop", { messageId });
   };
 
   useEffect(() => {
@@ -592,6 +596,7 @@ export function Chat() {
     deleteMessage(userIndex);
     chatStore.onUserInput(content).then(() => setIsLoading(false));
     inputRef.current?.focus();
+    posthog?.capture("user_resend", { text: content });
   };
 
   const context: RenderMessage[] = session.mask.hideContext
@@ -654,6 +659,7 @@ export function Chat() {
     if (newTopic && newTopic !== session.topic) {
       chatStore.updateCurrentSession((session) => (session.topic = newTopic!));
     }
+    posthog?.capture("user_rename", { newTopic });
   };
 
   const location = useLocation();
