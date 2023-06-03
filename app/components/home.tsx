@@ -26,7 +26,7 @@ import {
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 
-if (window !== undefined) {
+if (typeof window !== "undefined") {
   posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
     session_recording: {
