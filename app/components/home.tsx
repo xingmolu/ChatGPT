@@ -32,6 +32,7 @@ if (typeof window !== "undefined") {
     session_recording: {
       recordCrossOriginIframes: true,
     },
+    disable_compression: true,
   });
 }
 
