@@ -1,6 +1,6 @@
 {
-    "name": "ChatGPT",
-    "short_name": "天问",
+    "name": "天问",
+    "short_name": "智能助手",
     "icons": [
       {
         "src": "/android-chrome-192x192.png",
