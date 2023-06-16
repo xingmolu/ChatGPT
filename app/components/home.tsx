@@ -26,6 +26,7 @@ import {
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
+import { getClientConfig } from "../config/client";
 
 if (typeof window !== "undefined") {
   posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
@@ -105,9 +106,14 @@ const useHasHydrated = () => {
 
 const loadAsyncGoogleFont = () => {
   const linkEl = document.createElement("link");
+  const proxyFontUrl = "/google-fonts";
+  const remoteFontUrl = "https://fonts.googleapis.com";
+  const googleFontUrl =
+    getClientConfig()?.buildMode === "export" ? remoteFontUrl : proxyFontUrl;
   linkEl.rel = "stylesheet";
   linkEl.href =
-    "/google-fonts/css2?family=Noto+Sans+SC:wght@300;400;700;900&display=swap";
+    googleFontUrl +
+    "/css2?family=Noto+Sans+SC:wght@300;400;700;900&display=swap";
   document.head.appendChild(linkEl);
 };
 
@@ -159,6 +165,10 @@ function Screen() {
 export function Home() {
   useSwitchTheme();
   const posthog = usePostHog();
+
+  useEffect(() => {
+    console.log("[Config] got config from build time", getClientConfig());
+  }, []);
 
   if (!useHasHydrated()) {
     return <Loading />;
