@@ -1,4 +1,4 @@
-import { withSentryConfig } from "@sentry/nextjs";
+import { withSentryConfig, Replay } from "@sentry/nextjs";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
@@ -102,10 +102,17 @@ export default withSentryConfig(nextConfig, {
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
+  replaysSessionSampleRate: 1,
+  replaysOnErrorSampleRate: 1.0,
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0, // Profiling sample rate is relative to tracesSampleRate
   integrations: [
     // Add profiling integration to list of integrations
     new ProfilingIntegration(),
+    new Replay({
+      // Additional SDK configuration goes in here, for example:
+      maskAllText: true,
+      blockAllMedia: true,
+    }),
   ],
 });
