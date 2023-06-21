@@ -9,6 +9,7 @@ const nextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
+    config.module.rules.push({ test: /\.node$/, use: 'node-loader' });
 
     return config;
   },
