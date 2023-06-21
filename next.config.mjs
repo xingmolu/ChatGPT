@@ -1,5 +1,4 @@
-import { withSentryConfig } from "@sentry/nextjs";
-import { ProfilingIntegration } from "@sentry/profiling-node";
+import {withSentryConfig} from "@sentry/nextjs";
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
 
@@ -80,10 +79,10 @@ export default withSentryConfig(nextConfig, {
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
   // Suppresses source map uploading logs during build
-    silent: true,
+  silent: true,
 
-    org: "869549ba9dfe",
-    project: "javascript-nextjs",
+  org: "869549ba9dfe",
+  project: "javascript-nextjs",
   }, {
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -102,12 +101,4 @@ export default withSentryConfig(nextConfig, {
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
-  replaysSessionSampleRate: 1,
-  replaysOnErrorSampleRate: 1.0,
-  tracesSampleRate: 1.0,
-  profilesSampleRate: 1.0, // Profiling sample rate is relative to tracesSampleRate
-  integrations: [
-    // Add profiling integration to list of integrations
-    new ProfilingIntegration(),
-  ],
 });
