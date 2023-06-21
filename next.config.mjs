@@ -1,4 +1,4 @@
-import { withSentryConfig, Replay } from "@sentry/nextjs";
+import Replay, { withSentryConfig } from "@sentry/nextjs";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
