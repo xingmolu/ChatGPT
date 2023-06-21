@@ -1,4 +1,4 @@
-import Replay, { withSentryConfig } from "@sentry/nextjs";
+import { withSentryConfig } from "@sentry/nextjs";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
@@ -109,10 +109,5 @@ export default withSentryConfig(nextConfig, {
   integrations: [
     // Add profiling integration to list of integrations
     new ProfilingIntegration(),
-    new Replay({
-      // Additional SDK configuration goes in here, for example:
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
   ],
 });
