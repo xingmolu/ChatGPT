@@ -1,6 +1,11 @@
 import {withSentryConfig} from "@sentry/nextjs";
+import webpack from "webpack";
+
 const mode = process.env.BUILD_MODE ?? "standalone";
 console.log("[Next] build mode", mode);
+
+const disableChunk = !!process.env.DISABLE_CHUNK || mode === "export";
+console.log("[Next] build with chunk: ", !disableChunk);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -10,6 +15,12 @@ const nextConfig = {
       use: ["@svgr/webpack"],
     });
     config.module.rules.push({ test: /\.node$/, use: 'node-loader' });
+
+    if (disableChunk) {
+      config.plugins.push(
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+      );
+    }
 
     return config;
   },

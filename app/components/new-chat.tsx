@@ -15,6 +15,7 @@ import Locale from "../locales";
 import { useAppConfig, useChatStore } from "../store";
 import { MaskAvatar } from "./mask";
 import { useCommand } from "../command";
+import { showConfirm } from "./ui-lib";
 
 function getIntersectionArea(aRect: DOMRect, bRect: DOMRect) {
   const xmin = Math.max(aRect.x, bRect.x);
@@ -128,8 +129,8 @@ export function NewChat() {
         {!state?.fromHome && (
           <IconButton
             text={Locale.NewChat.NotShow}
-            onClick={() => {
-              if (confirm(Locale.NewChat.ConfirmNoShow)) {
+            onClick={async () => {
+              if (await showConfirm(Locale.NewChat.ConfirmNoShow)) {
                 startChat();
                 config.update(
                   (config) => (config.dontShowMaskSplashScreen = true),
