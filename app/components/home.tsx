@@ -30,6 +30,7 @@ import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { api } from "../client/api";
+import { useAccessStore } from "../store";
 
 if (typeof window !== "undefined") {
   posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
@@ -183,6 +184,7 @@ export function Home() {
 
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());
+    useAccessStore.getState().fetch();
   }, []);
 
   if (!useHasHydrated()) {
