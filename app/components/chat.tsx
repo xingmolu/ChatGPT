@@ -791,7 +791,6 @@ export function Chat() {
     setIsLoading(true);
     chatStore.onUserInput(userMessage.content).then(() => setIsLoading(false));
     inputRef.current?.focus();
-    posthog?.capture("user_resend", { text: content });
   };
 
   const onPinMessage = (message: ChatMessage) => {
