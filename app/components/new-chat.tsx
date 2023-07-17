@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { usePostHog } from "posthog-js/react";
 import { Path, SlotID } from "../constant";
 import { IconButton } from "./button";
 import { EmojiAvatar } from "./emoji";
@@ -86,7 +85,6 @@ export function NewChat() {
 
   const masks = maskStore.getAll();
   const groups = useMaskGroup(masks);
-  const posthog = usePostHog();
 
   const navigate = useNavigate();
   const config = useAppConfig();
@@ -105,8 +103,7 @@ export function NewChat() {
   useCommand({
     mask: (id) => {
       try {
-        const intId = parseInt(id);
-        const mask = maskStore.get(intId) ?? BUILTIN_MASK_STORE.get(intId);
+        const mask = maskStore.get(id) ?? BUILTIN_MASK_STORE.get(id);
         startChat(mask ?? undefined);
       } catch {
         console.error("[New Chat] failed to create chat from mask id=", id);
@@ -139,7 +136,6 @@ export function NewChat() {
                   (config) => (config.dontShowMaskSplashScreen = true),
                 );
               }
-              posthog?.capture("dont_show_mask_splash_screen");
             }}
           ></IconButton>
         )}

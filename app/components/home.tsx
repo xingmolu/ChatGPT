@@ -3,8 +3,6 @@
 require("../polyfill");
 
 import { useState, useEffect } from "react";
-import posthog from "posthog-js";
-import { PostHogProvider, usePostHog } from "posthog-js/react";
 
 import styles from "./home.module.scss";
 
@@ -30,16 +28,17 @@ import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { api } from "../client/api";
+import { useAccessStore } from "../store";
 
-if (typeof window !== "undefined") {
-  posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
-    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
-    session_recording: {
-      recordCrossOriginIframes: true,
-    },
-    disable_compression: true,
-  });
-}
+// if (typeof window !== "undefined") {
+//   posthog.init("phc_8IuCMRtESvgycZHxpHhhofpWmW0VeLJd0COxHLDvLPX" || "", {
+//     api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://app.posthog.com",
+//     session_recording: {
+//       recordCrossOriginIframes: true,
+//     },
+//     disable_compression: true,
+//   });
+// }
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -183,6 +182,7 @@ export function Home() {
 
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());
+    useAccessStore.getState().fetch();
   }, []);
 
   if (!useHasHydrated()) {
@@ -191,11 +191,11 @@ export function Home() {
 
   return (
     <ErrorBoundary>
-      <PostHogProvider client={posthog}>
-        <Router>
-          <Screen />
-        </Router>
-      </PostHogProvider>
+      {/* <PostHogProvider client={posthog}> */}
+      <Router>
+        <Screen />
+      </Router>
+      {/* </PostHogProvider> */}
     </ErrorBoundary>
   );
 }

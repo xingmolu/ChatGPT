@@ -3,10 +3,11 @@ import "./styles/globals.scss";
 import "./styles/markdown.scss";
 import "./styles/highlight.scss";
 import { getClientConfig } from "./config/client";
+import { type Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "天问",
-  description: "你的私人Ai机器人",
+  description: "你的私人AI机器人",
   viewport: {
     width: "device-width",
     initialScale: 1,
