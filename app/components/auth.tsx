@@ -74,13 +74,6 @@ export function AuthPage() {
             goHome();
           }}
         />
-        <IconButton
-          text={Locale.Auth.Later}
-          onClick={() => {
-            resetAccessCode();
-            goHome();
-          }}
-        />
       </div>
     </div>
   );
